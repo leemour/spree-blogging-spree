@@ -72,9 +72,9 @@ class Spree::BlogEntry < ActiveRecord::Base
 
   def self.months_for(year)
     visible
-      .where("EXTACT(MONTH FROM published_at) = ?", year)
+      .where("EXTRACT(YEAR FROM published_at) = ?", year)
+      .pluck("EXTRACT(MONTH FROM published_at)::int AS month")
       .uniq
-      .pluck(:month)
   end
 
   def create_permalink

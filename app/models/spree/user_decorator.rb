@@ -4,4 +4,11 @@ if Spree.user_class
   end
 end
 
-Spree::PermittedAttributes.user_attributes.push :nickname, :website_url, :google_plus_url, :bio_info
+Spree::PermittedAttributes.user_attributes.push(
+  :nickname,
+  :website_url,
+  :google_plus_url,
+  :bio_info,
+  :name,
+  :surname,
+)

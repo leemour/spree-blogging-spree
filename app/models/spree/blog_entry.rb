@@ -6,6 +6,7 @@ class Spree::BlogEntry < ActiveRecord::Base
   before_save :set_published_at
   validates_presence_of :title
   validates_presence_of :body
+  validates_presence_of :blog_entry_image
 
   default_scope { order("published_at DESC") }
   scope :visible, -> { where :visible => true }
@@ -20,19 +21,28 @@ class Spree::BlogEntry < ActiveRecord::Base
   has_one :blog_entry_image, :as => :viewable, :dependent => :destroy, :class_name => 'Spree::BlogEntryImage'
   accepts_nested_attributes_for :blog_entry_image, :reject_if => :all_blank
 
+  alias_method :image, :blog_entry_image
+
   scope :by_tag, -> (tag_name) {
-    tagged_with(tag_name, :on => :tags)
+    return if tag_name.blank?
+    tagged_with(tag_name, on: :tags)
   }
-
   scope :by_category, -> (category_name) {
-    tagged_with(category_name, :on => :categories)
+    return if category_name.blank?
+    tagged_with(category_name, on: :categories)
   }
-
   scope :by_author, -> (author) {
-    where(:author_id => author)
+    return if author.blank?
+    where(author_id: author)
+  }
+  scope :by_text, -> (text) {
+    return if text.blank?
+    where('title iLIKE :title OR body iLIKE :body',
+      title: "%#{text}%", body: "%#{text}%")
   }
 
   scope :by_date, -> (date, period = nil) {
+    return unless date
     if date.is_a?(Hash)
       keys = [:day, :month, :year].select {|key| date.include?(key) }
       period = keys.first.to_s
@@ -62,6 +72,30 @@ class Spree::BlogEntry < ActiveRecord::Base
     else
       summary
     end
+  end
+
+  def related(count = 5)
+    @related = related_by_categories(count)
+    return @related if @related.length == count
+    @related += related_by_tags(count - @related.length)
+    return @related if @related.length == count
+    @related += self.class
+      .recent(count - @related.length)
+      .where.not(id: self.id)
+  end
+
+  def related_by_tags(count = 5)
+    self.class
+      .tagged_with(self.tag_list, on: :tags)
+      .where.not(id: self.id)
+      .limit(5)
+  end
+
+  def related_by_categories(count = 5)
+    self.class
+      .tagged_with(self.tag_list, on: :categories)
+      .where.not(id: self.id)
+      .limit(5)
   end
 
   private

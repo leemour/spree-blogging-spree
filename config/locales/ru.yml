@@ -5,8 +5,11 @@ ru:
   activerecord:
     models:
       spree/blog_entry:
-        one: Запись
-        other: Записи
+        zero: Статей
+        one: Статья
+        few: Статьи
+        many: Статей
+        other: Статьи
     attributes:
       spree/blog_entry:
         title: Заголовок
@@ -26,6 +29,8 @@ ru:
         website_url: Ссылка на сайт
         google_plus_url: Ссылка на профиль в Google Plus
         bio_info: Биография
+        name: Имя
+        surname: Фамилия
   spree:
     view_in_store: Посмотреть
     back_to_blog_list: К списку записей

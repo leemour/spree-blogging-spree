@@ -23,6 +23,8 @@ es:
         website_url: Website URL
         google_plus_url: Google Plus URL
         bio_info: Bio
+        name: Name
+        surname: Surname
   spree:
     title: Título
     body: Cuerpo

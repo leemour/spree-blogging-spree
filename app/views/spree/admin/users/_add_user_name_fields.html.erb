@@ -1,0 +1,12 @@
+  <div class="col-md-6">
+    <%= f.field_container :name, class: ['form-group'] do %>
+      <%= f.label :name %>
+      <%= f.text_field :name, :class => 'form-control' %>
+      <%= error_message_on :user, :name %>
+    <% end %>
+    <%= f.field_container :surname, class: ['form-group'] do %>
+      <%= f.label :surname %>
+      <%= f.text_field :surname, :class => 'form-control' %>
+      <%= error_message_on :user, :surname %>
+    <% end %>
+  </div>

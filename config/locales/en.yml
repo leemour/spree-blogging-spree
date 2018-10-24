@@ -26,6 +26,8 @@ en:
         website_url: Website URL
         google_plus_url: Google Plus URL
         bio_info: Biographical info
+        name: Name
+        surname: Surname
   spree:
     title: Title
     body: Body
